@@ -7,8 +7,7 @@ import uuid
 import threading
 import json
 from datetime import datetime, timedelta
-from selenium import webdriver
-from selenium.webdriver.edge.service import Service as EdgeService
+from selenium import webdriverfrom selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -374,4 +373,36 @@ def worker_thread(thread_id, daftar_akun, chat_id, is_admin, stats):
                 f"✅ **AKUN SUKSES** `[{thread_name}]`\n"
                 f"📧 Akun: `{baris_asli}`\n"
                 f"📌 Metode: `{status_akun}`\n"
-                f"💰 Sisa Saldo: `{
+                f"💰 Sisa Saldo: `{sisa_saldo_akhir}`\n\n"
+            f"Mengirimkan file hasil di bawah ini..."
+        )
+        kirim_pesan_tele(chat_id, ringkasan)
+        kirim_file_tele(chat_id, "siapjual.txt", "✅ Hasil Akun Sukses (siapjual.txt)")
+        kirim_file_tele(chat_id, "gagal.txt", "❌ Hasil Akun Gagal (gagal.txt)")
+
+    threading.Thread(target=run_threads_bg).start()
+
+# ==========================================
+# MAIN PROGRAM
+# ==========================================
+def main():
+    app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
+
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("redeem", redeem_key))
+    app.add_handler(CommandHandler("status", cek_status))
+    app.add_handler(CommandHandler("saldo", cek_saldo))
+    app.add_handler(CommandHandler("run", cmd_run))
+    app.add_handler(CommandHandler("hasil", cmd_hasil))
+
+    # Admin
+    app.add_handler(CommandHandler("genkey", cmd_genkey))
+    app.add_handler(CommandHandler("delkey", cmd_delkey))
+    app.add_handler(CommandHandler("listkeys", cmd_listkeys))
+    app.add_handler(CommandHandler("addsaldo", cmd_addsaldo))
+
+    print("🤖 Bot Telegram siap digunakan! Tekan Ctrl+C untuk berhenti.")
+    app.run_polling()
+
+if __name__ == '__main__':
+    main()
