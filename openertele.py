@@ -7,7 +7,8 @@ import uuid
 import threading
 import json
 from datetime import datetime, timedelta
-from selenium import webdriverfrom selenium.webdriver.edge.service import Service as EdgeService
+from selenium import webdriver
+from selenium.webdriver.edge.service import Service as EdgeService
 from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
